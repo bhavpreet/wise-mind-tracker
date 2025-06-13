@@ -1,9 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, Plus, BarChart3, Target, BookOpen, Circle, Dot, TrendingUp, Trash2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Calendar, Plus, BarChart3, BookOpen, Dot, TrendingUp, Trash2 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 
+interface Entry {
+  id: number;
+  timestamp: string;
+  date: string;
+  situation: string;
+  mindState: string;
+  reflection: string;
+  goal: string;
+}
+
 const WiseMindTracker = () => {
-  const [entries, setEntries] = useState([]);
+  const [entries, setEntries] = useState<Entry[]>([]);
   const [showAddEntry, setShowAddEntry] = useState(false);
   const [currentEntry, setCurrentEntry] = useState({
     date: new Date().toISOString().split('T')[0],
@@ -44,7 +54,7 @@ const WiseMindTracker = () => {
     }
   };
 
-  const deleteEntry = (entryId) => {
+  const deleteEntry = (entryId: number) => {
     if (window.confirm('Are you sure you want to delete this reflection?')) {
       setEntries(entries.filter(entry => entry.id !== entryId));
     }
@@ -113,7 +123,7 @@ const WiseMindTracker = () => {
   const chartData = getChartData();
   const pieData = getPieData();
 
-  const MindStateCircle = ({ type, count, isActive }) => {
+  const MindStateCircle = ({ type, count, isActive }: { type: string; count: number; isActive?: boolean }) => {
     const colors = {
       emotion: 'bg-red-100 border-red-300 text-red-700',
       rational: 'bg-blue-100 border-blue-300 text-blue-700',
@@ -127,9 +137,9 @@ const WiseMindTracker = () => {
     };
 
     return (
-      <div className={`relative w-32 h-32 rounded-full border-4 flex flex-col items-center justify-center ${colors[type]} ${isActive ? 'ring-4 ring-offset-2 ring-purple-300' : ''}`}>
+      <div className={`relative w-32 h-32 rounded-full border-4 flex flex-col items-center justify-center ${colors[type as keyof typeof colors]} ${isActive ? 'ring-4 ring-offset-2 ring-purple-300' : ''}`}>
         <div className="text-lg font-bold">{count}</div>
-        <div className="text-xs text-center px-2">{labels[type]}</div>
+        <div className="text-xs text-center px-2">{labels[type as keyof typeof labels]}</div>
         {Array.from({ length: count }).map((_, i) => (
           <Dot key={i} className="absolute w-3 h-3" style={{
             top: `${20 + (i % 3) * 15}px`,
@@ -300,9 +310,9 @@ const WiseMindTracker = () => {
         </div>
 
         <div className="flex justify-center items-center gap-8 mb-6">
-          <MindStateCircle type="emotion" count={stats.emotion} />
-          <MindStateCircle type="rational" count={stats.rational} />
-          <MindStateCircle type="wise" count={stats.wise} />
+          <MindStateCircle type="emotion" count={stats.emotion} isActive={false} />
+          <MindStateCircle type="rational" count={stats.rational} isActive={false} />
+          <MindStateCircle type="wise" count={stats.wise} isActive={false} />
         </div>
 
         <div className="text-center mb-6">
