@@ -49,7 +49,7 @@ This project is configured to deploy to GitHub Pages. Run `npm run deploy` to bu
 
 ## Technologies Used
 
-- React 18
+- React 19
 - TypeScript
 - Vite
 - Recharts for data visualization
