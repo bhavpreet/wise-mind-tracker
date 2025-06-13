@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Plus, BarChart3, Target, BookOpen, Circle, Dot, TrendingUp } from 'lucide-react';
+import { Calendar, Plus, BarChart3, Target, BookOpen, Circle, Dot, TrendingUp, Trash2 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 
 const WiseMindTracker = () => {
@@ -41,6 +41,12 @@ const WiseMindTracker = () => {
         goal: ''
       });
       setShowAddEntry(false);
+    }
+  };
+
+  const deleteEntry = (entryId) => {
+    if (window.confirm('Are you sure you want to delete this reflection?')) {
+      setEntries(entries.filter(entry => entry.id !== entryId));
     }
   };
 
@@ -419,17 +425,26 @@ const WiseMindTracker = () => {
         ) : (
           <div className="space-y-4 max-h-96 overflow-y-auto">
             {entries.slice(0, 10).map(entry => (
-              <div key={entry.id} className="border-l-4 border-purple-300 pl-4 py-2">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-medium">{new Date(entry.date).toLocaleDateString()}</span>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    entry.mindState === 'wise' ? 'bg-green-100 text-green-700' :
-                    entry.mindState === 'emotion' ? 'bg-red-100 text-red-700' :
-                    'bg-blue-100 text-blue-700'
-                  }`}>
-                    {entry.mindState === 'wise' ? 'Wise Mind' : 
-                     entry.mindState === 'emotion' ? 'Emotion Mind' : 'Rational Mind'}
-                  </span>
+              <div key={entry.id} className="border-l-4 border-purple-300 pl-4 py-2 relative group">
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">{new Date(entry.date).toLocaleDateString()}</span>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      entry.mindState === 'wise' ? 'bg-green-100 text-green-700' :
+                      entry.mindState === 'emotion' ? 'bg-red-100 text-red-700' :
+                      'bg-blue-100 text-blue-700'
+                    }`}>
+                      {entry.mindState === 'wise' ? 'Wise Mind' : 
+                       entry.mindState === 'emotion' ? 'Emotion Mind' : 'Rational Mind'}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => deleteEntry(entry.id)}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded"
+                    title="Delete entry"
+                  >
+                    <Trash2 size={16} />
+                  </button>
                 </div>
                 <p className="text-sm text-gray-600 mb-1"><strong>Situation:</strong> {entry.situation}</p>
                 <p className="text-sm text-gray-600 mb-1"><strong>Reflection:</strong> {entry.reflection}</p>
