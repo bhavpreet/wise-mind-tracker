@@ -1,10 +1,4 @@
 {
-  "dependencies": {
-    "lucide-react": "^0.515.0",
-    "recharts": "^2.15.3"
-  }
-}
-{
   "name": "wise-mind-tracker",
   "private": true,
   "version": "0.0.0",
